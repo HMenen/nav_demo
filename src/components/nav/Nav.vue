@@ -22,9 +22,9 @@ export default {
     MyPanne,
     MyTab
   },
-  data: function () {
-    return {
-      activeKey: 1
+  data() {
+    return{
+      activeKey: 1,
     }
   }
 }

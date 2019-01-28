@@ -1,5 +1,5 @@
 <template>
-    <div class="panne" >
+    <div class="panne" v-show="show">
         <slot></slot>
     </div>
 </template>
@@ -21,13 +21,21 @@ export default {
   },
   methods: {
     updateNav () {
-      console.log('----111----')
       this.$parent.updateNav();
+    }
+  },
+  data() {
+    return{
+      show: true
     }
   }
 }
 </script>
 
 <style>
-
+.panne{
+  width: 100%;
+  height: 180px;
+  background-color: aqua;
+}
 </style>
