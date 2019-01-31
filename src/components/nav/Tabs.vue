@@ -4,7 +4,8 @@
     <div class="tab" 
       v-for="(item, index) in tabList" 
       :key="index"
-      @click="onChangeStatus(item)">
+      @click="onChangeStatus(item)"
+      :class="active">
       {{ item.label }}
     </div>
   </div>
@@ -20,7 +21,8 @@ export default {
   data() {
     return{
       tabList: [],
-      currentValue: this.value
+      currentValue: this.value,
+      active: false
     }
   },
   probs: {
@@ -42,10 +44,10 @@ export default {
         _this.tabList.push({
           name: panne.$attrs.name,
           label: panne.$attrs.label,
+          active: false
         });
         if (index === 0) {
           this.currentValue = panne.$attrs.name;
-          console.log(this.currentValue);
         }
       });
     this.updateStatus();
@@ -54,14 +56,13 @@ export default {
       var tabs = this.getTabs();
       let _this = this;
       tabs.forEach( tab => {
-        console.log(tab);
         tab.show = _this.currentValue == tab.$attrs.name;
       });
     },
     onChangeStatus (item) {
-      console.log(item);
       this.currentValue = item.name;
       this.updateStatus();
+      this.tabList[item.index].active = true;
     }
   }
 }
@@ -76,6 +77,9 @@ export default {
       border: solid black 1px;
       background-color: yellow;
       line-height: 40px;
+    }
+    .tab active{
+      background-color: blue;
     }
   }
 }
