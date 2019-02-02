@@ -2,6 +2,17 @@
   <div>
     <div v-time="timeNow"></div>
     <div v-time="timeBefore"></div>
+    <router-link to="/input" tag="li">input</router-link>
+    <button @click="handlerRouter">跳转</button>
+    <br>
+    使用vuex：{{count}}
+    <div>
+      <button @click="handleIncrement">+1</button>
+      <button @click="handleDecrease">-1</button>
+      <button @click="handleAsyncIncrement">+1</button>
+      <button @click="isFive">isFive</button>
+    </div>
+    使用vuex---getters:{{list}}
   </div>
 </template>
 
@@ -23,11 +34,58 @@ export default {
         }, 60000);
         },
         unbind: function() {
-        clearInterval(el.__timeout__);
-        delete el.__timeout__;
+        // clearInterval(el.__timeout__);
+        // delete el.__timeout__;
         }
     }
+  },
+  created() {
+    console.log(this.$route.params)
+  },
+  methods: {
+    handlerRouter: function () {
+      this.$router.push('/input');
+    },
+    handleIncrement: function () {
+      this.$store.commit('increment');
+    },
+    handleDecrease: function () {
+      this.$store.commit('decrease', 5);
+    },
+    handleAsyncIncrement: function () {
+      this.$store.dispatch('asyncIncrement').then(() => {
+        console.log(this.$store.state.count);
+      });
+    },
+    isFive: function () {
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          let random = Math.random(10);
+          if (random > 0.5) {
+            resolve (random);
+          }else{
+            reject (random);
+          }
+        }, 1000);
+      }).then((value) => {
+        console.log('sucess', value);
+      }).catch((error) => {
+        console.log('fail', error);
+      });
+    }
+  },
+  computed: {
+    count: function () {
+      return this.$store.state.count;
+    },
+    list: function () {
+      return this.$store.getters.filteredList;
+    }
   }
+  // beforeRouteLeave(to, from, next) {
+  //     window.document.title = to.meta.title;
+  //     next()
+  //   },
 }
 
 var Time = {
@@ -83,9 +141,9 @@ var Time = {
         }else if(timer >= 3600 && (timestamp - today) >= 0){
           tip = Math.floor(timer / 3600) + '小时';
         }else if (timer / 86400 <= 31){
-            tip = Math.floor(timer / 86400) + '天';
+          tip = Math.floor(timer / 86400) + '天';
         }else{
-            tip = this.getLastDate(timestamp);
+          tip = this.getLastDate(timestamp);
         }
         return tip;
     }
